@@ -31,17 +31,8 @@ class Produccion:
         terminales = self.main.terminales
 
         try:
-
-            for simbolo in noTerminales:
-                if simbolo in derivacion:
-                    self.derivacion.append(self.main.obtenerSimbolo(simbolo))
-                    self.__longitudDerivacion += 1
-
-            for simbolo in terminales:
-                if simbolo in derivacion:
-                    self.derivacion.append(self.main.obtenerSimbolo(simbolo))
-                    self.__longitudDerivacion += 1
-
+            for simbolo in derivacion:
+                self.derivacion.append(self.main.obtenerSimbolo(simbolo))
         except Exception as e:
             print(e)
 

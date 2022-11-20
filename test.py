@@ -1,7 +1,7 @@
 from Models.main import Main
 
 noTerminales = ['S', 'E', 'T', 'F']
-terminales = ['+', '*', '(', ')', 'id']
+terminales = ['+', '*', '(', ')', 'k']
 producciones = [
     ['S', 'E'],
     ['E', 'E+T'],
@@ -9,7 +9,7 @@ producciones = [
     ['T', 'T*F'],
     ['T', 'F'],
     ['F', '(E)'],
-    ['F', 'id']
+    ['F', 'k']
 ]
 
 main = Main(noTerminales, terminales, producciones)

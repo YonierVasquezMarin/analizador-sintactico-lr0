@@ -43,5 +43,5 @@ class Main:
         for simbolo in self.simbolos:
             if simbolo.contenido == contenido:
                 return simbolo
-        raise Exception('Error: no se encontró el simbolo')
+        raise Exception('Error: no se encontró el simbolo con contenido "', contenido, '"')
         return None
