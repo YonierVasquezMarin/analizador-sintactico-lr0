@@ -3,7 +3,7 @@ from Models.produccion import Produccion
 from Models.simbolo import Simbolo
 
 
-class Main:
+class Control:
     noTerminales: list[ str ]
     terminales: list[ str ]
     simbolos: list[ Simbolo ]

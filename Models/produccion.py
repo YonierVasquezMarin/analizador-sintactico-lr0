@@ -9,9 +9,9 @@ class Produccion:
     produccionRN: str | None
     __longitudDerivacion: int
     __posicionPunto: int
-    main = None
+    control = None
 
-    def __init__(self, id: int, noTerminal: str, derivacion: str, main):
+    def __init__(self, id: int, noTerminal: str, derivacion: str, control):
         self.id = id
         self.noTerminal = noTerminal
         self.derivacion = []
@@ -19,7 +19,7 @@ class Produccion:
         self.produccionRN = None
         self.__longitudDerivacion = 0
         self.__posicionPunto = 0
-        self.main = main
+        self.control = control
         self.__cargarSimbolosDerivacion(derivacion)
 
     def __cargarSimbolosDerivacion(self, derivacion: str):
@@ -27,12 +27,12 @@ class Produccion:
         Por cada simbolo de la derivacion, se trae una instancia de
         ese simbolo correspondiente de la clase Main.
         '''
-        noTerminales = self.main.noTerminales
-        terminales = self.main.terminales
+        noTerminales = self.control.noTerminales
+        terminales = self.control.terminales
 
         try:
             for simbolo in derivacion:
-                self.derivacion.append(self.main.obtenerSimbolo(simbolo))
+                self.derivacion.append(self.control.obtenerSimbolo(simbolo))
         except Exception as e:
             print(e)
 

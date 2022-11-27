@@ -1,4 +1,4 @@
-from Models.main import Main
+from Models.control import Control
 
 noTerminales = ['S', 'E', 'T', 'F']
 terminales = ['+', '*', '(', ')', 'k']
@@ -12,7 +12,7 @@ producciones = [
     ['F', 'k']
 ]
 
-main = Main(noTerminales, terminales, producciones)
+main = Control(noTerminales, terminales, producciones)
 
 print('imprimir lista producciones desde test')
 for produccion in main.producciones:

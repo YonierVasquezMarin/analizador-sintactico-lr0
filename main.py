@@ -1,2 +1,2 @@
-from Models.main import Main
+from Models.control import Control
 
