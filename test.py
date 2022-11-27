@@ -28,10 +28,6 @@ for produccion in produccionesI0:
 
 ################################################
 
-# print('imprimir lista producciones desde test')
-# for produccion in main.producciones:
-#     print(produccion)
-
 # S -> .E
 # E -> .E + T
 # E -> .T
@@ -39,15 +35,3 @@ for produccion in produccionesI0:
 # T -> .F
 # F -> .id
 # F -> .(E)
-
-# noTerminales = ['S', 'A']
-# terminales = ['c', 'b']
-# producciones = [
-#     ['S', 'Ab'],
-#     ['A', 'c'],
-# ]
-# control = Control(noTerminales, terminales, producciones)
-
-# producciones = control.estados[0].producciones
-# for produccion in producciones:
-#     print(produccion)

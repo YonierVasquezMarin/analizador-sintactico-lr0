@@ -1,3 +1,4 @@
+import copy
 from Models.produccion import Produccion
 from Models.transicion import Transicion
 
@@ -35,7 +36,7 @@ class Estado:
                 produccionesNoTerminal = self.control.obtenerProducciones(simboloSiguiente.contenido)
 
                 # Solo tomar en cuenta las producciones que no estan
-                # en el estado. Se comparan sus ids.
+                # en el estado. Se comparan sus IDs.
                 for produccionExterna in produccionesNoTerminal:
                     noTerminalExiste = False
                     for produccionEstado in self.producciones:
@@ -43,14 +44,12 @@ class Estado:
                             noTerminalExiste = True
                             break
                     if not noTerminalExiste:
-                        self.producciones.append(produccionExterna)
-
-                posicionProduccionAnalizar += 1
+                        self.producciones.append(copy.deepcopy(produccionExterna))
 
             # Si el simbolo siguiente es un terminal, se pasa a la siguiente produccion
             else:
                 if posicionProduccionAnalizar == len(self.producciones) - 1:
                     posicionProduccionAnalizar = 0
                     break # Se terminaron de analizar todas las producciones
-                else:
-                    posicionProduccionAnalizar += 1
+
+            posicionProduccionAnalizar += 1
