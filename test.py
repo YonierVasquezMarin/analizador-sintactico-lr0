@@ -19,12 +19,12 @@ for produccion in produccionesI0:
     print(produccion)
 
 # Helper para listas
-print("----------------------------------------------------------")
-noTerminales2 = "S, B, C"
-terminales2 = "a, d, b, c"
-produccion = "S -> aBCd\nB -> bb\nC -> cc"
-helper = Helper(noTerminales2, terminales2, produccion)
-print(helper.prepararListas(produccion))
+# print("----------------------------------------------------------")
+# noTerminales2 = "S, B, C"
+# terminales2 = "a, d, b, c"
+# produccion = "S -> aBCd\nB -> bb\nC -> cc"
+# helper = Helper(noTerminales2, terminales2, produccion)
+# print(helper.prepararListas(produccion))
 
 ################################################
 

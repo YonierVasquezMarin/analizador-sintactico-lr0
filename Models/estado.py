@@ -37,9 +37,13 @@ class Estado:
                 # Solo tomar en cuenta las producciones que no estan
                 # en el estado. Se comparan sus ids.
                 for produccionExterna in produccionesNoTerminal:
+                    noTerminalExiste = False
                     for produccionEstado in self.producciones:
-                        if produccionExterna.id != produccionEstado.id:
-                            self.producciones.append(produccionExterna)
+                        if produccionExterna.id == produccionEstado.id:
+                            noTerminalExiste = True
+                            break
+                    if not noTerminalExiste:
+                        self.producciones.append(produccionExterna)
 
                 posicionProduccionAnalizar += 1
 

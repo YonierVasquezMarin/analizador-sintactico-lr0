@@ -9,7 +9,6 @@ class Control:
     simbolos: list[ Simbolo ]
     producciones: list[ Produccion ]
     estados: list[ Estado ]
-    control = None
 
     def __init__(self, noTerminales: list[str], terminales: list[str], producciones: list[str]):
         self.noTerminales = noTerminales
@@ -61,9 +60,9 @@ class Control:
     def __cargarEstados(self):
         '''Carga un estado inicial I0, y desde éste se crean los demás estados.'''
 
-        # Creo el estado inicial I0
+        # Crear el estado inicial I0
         self.estados.append(Estado(0, self))
 
-        # Pasar al estado I0 la primera produccion, y desde éste se crean los demás estados.
+        # Pasar al estado I0 la primera produccion y cargar sus producciones internas
         self.estados[0].producciones.append(self.producciones[0])
         self.estados[0].cargarProduccionesFaltantes()
