@@ -12,11 +12,17 @@ producciones = [
     ['F', 'k']
 ]
 
-main = Control(noTerminales, terminales, producciones)
-
-print('imprimir lista producciones desde test')
-for produccion in main.producciones:
+control = Control(noTerminales, terminales, producciones)
+produccionesI0 = control.estados[0].producciones
+for produccion in produccionesI0:
     print(produccion)
+
+
+################################################
+
+# print('imprimir lista producciones desde test')
+# for produccion in main.producciones:
+#     print(produccion)
 
 # S -> .E
 # E -> .E + T
@@ -25,3 +31,15 @@ for produccion in main.producciones:
 # T -> .F
 # F -> .id
 # F -> .(E)
+
+# noTerminales = ['S', 'A']
+# terminales = ['c', 'b']
+# producciones = [
+#     ['S', 'Ab'],
+#     ['A', 'c'],
+# ]
+# control = Control(noTerminales, terminales, producciones)
+
+# producciones = control.estados[0].producciones
+# for produccion in producciones:
+#     print(produccion)

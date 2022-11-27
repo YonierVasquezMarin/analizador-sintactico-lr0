@@ -9,6 +9,7 @@ class Control:
     simbolos: list[ Simbolo ]
     producciones: list[ Produccion ]
     estados: list[ Estado ]
+    control = None
 
     def __init__(self, noTerminales: list[str], terminales: list[str], producciones: list[str]):
         self.noTerminales = noTerminales
@@ -18,6 +19,7 @@ class Control:
         self.estados = []
         self.__cargarSimbolos()
         self.__cargarProducciones(producciones)
+        self.__cargarEstados()
 
     def __cargarSimbolos(self):
         '''
@@ -35,6 +37,17 @@ class Control:
         for i in range(len(producciones)):
             self.producciones.append(Produccion(i, producciones[i][0], producciones[i][1], self))
 
+    def obtenerProducciones(self, noTerminal: str):
+        '''
+        Devuelve una lista de Produccion correspondiente al no terminal
+        pasado por parametro.
+        '''
+        producciones = []
+        for produccion in self.producciones:
+            if produccion.noTerminal == noTerminal:
+                producciones.append(produccion)
+        return producciones
+
     def obtenerSimbolo(self, contenido) -> Simbolo : 
         '''
         Devuelve una instancia de Simbolo correspondiente al contenido
@@ -44,4 +57,13 @@ class Control:
             if simbolo.contenido == contenido:
                 return simbolo
         raise Exception('Error: no se encontró el simbolo con contenido "', contenido, '"')
-        return None
+
+    def __cargarEstados(self):
+        '''Carga un estado inicial I0, y desde éste se crean los demás estados.'''
+
+        # Creo el estado inicial I0
+        self.estados.append(Estado(0, self))
+
+        # Pasar al estado I0 la primera produccion, y desde éste se crean los demás estados.
+        self.estados[0].producciones.append(self.producciones[0])
+        self.estados[0].cargarProduccionesFaltantes()

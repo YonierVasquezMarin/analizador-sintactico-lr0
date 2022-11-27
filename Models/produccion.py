@@ -21,21 +21,30 @@ class Produccion:
         self.__posicionPunto = 0
         self.control = control
         self.__cargarSimbolosDerivacion(derivacion)
+        self.__cargarLongitudDerivacion()
 
     def __cargarSimbolosDerivacion(self, derivacion: str):
         '''
-        Por cada simbolo de la derivacion, se trae una instancia de
+        Por cada caracter de la derivacion, se trae una instancia de
         ese simbolo correspondiente de la clase Main.
         '''
-        noTerminales = self.control.noTerminales
-        terminales = self.control.terminales
-
         try:
             for simbolo in derivacion:
                 self.derivacion.append(self.control.obtenerSimbolo(simbolo))
         except Exception as e:
             print(e)
 
+    def __cargarLongitudDerivacion(self):
+        self.__longitudDerivacion = len(self.derivacion)
+
+    def simboloDelanteDelPunto(self) -> Simbolo | None:
+        '''
+        Devuelve el simbolo que se encuentra delante del punto.
+        Si no hay simbolo delante del punto, devuelve None.
+        '''
+        if self.__posicionPunto < self.__longitudDerivacion:
+            return self.derivacion[self.__posicionPunto]
+        return None
 
     def __str__(self):
         contenidoDerivacion = ''
