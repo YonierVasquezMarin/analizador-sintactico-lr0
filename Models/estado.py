@@ -88,8 +88,18 @@ class Estado:
                     # Para el nuevo estado cargar las producciones internas faltantes
                     nuevoEstado.cargarProduccionesFaltantes()
 
+                    # Comparar este estado con los demás estados
+                    estadoEquivalente = nuevoEstado.compararConDemasEstados()
+                    if estadoEquivalente != None: # si hay estado equivalente
+                        nuevoEstado.nombre = self.generarNombreEstado()
+                        nuevoEstado.crearEstadosYTransiciones()
+                    else: # no hay estado equivalente
+                        nuevoEstado.equivalenteAlEstado = estadoEquivalente.id
+                        nuevoEstado.nombre = self.generarNombreEstado(estadoEquivalente.id)
+
             else:
                 produccion.marcarRN()
+                
 
     def existeTransicion(self, simbolo):
         '''
@@ -151,3 +161,16 @@ class Estado:
                         break
 
         return estadoComparar
+
+    def generarNombreEstado(self, idEstadoEquivalente: int | None) -> str:
+        '''
+        Si el parámetro "idEstadoEquivalente" es dado el nombre es "IGUAL A I{idEstado}".
+        Si el parámetro no es dado, desde control se trae el indice del último estado válido.
+        '''
+        if idEstadoEquivalente != None:
+            estadoEquivalente = self.control.obtenerEstado(idEstadoEquivalente)
+            idEstadoEquivalente = estadoEquivalente.id
+            return "IGUAL A I" + str(idEstadoEquivalente)
+        else:
+            cantidadEstadosNoIguales = self.control.cantidadEstadosNoIgual()
+            return "I" + str(cantidadEstadosNoIguales)

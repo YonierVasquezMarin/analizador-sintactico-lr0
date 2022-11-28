@@ -78,3 +78,22 @@ class Control:
         estado = Estado(idEstado, self)
         self.estados.append(estado)
         return estado
+
+    def obtenerEstado(self, idEstado) -> Estado:
+        '''Retornar el estado solicitado'''
+        estadoRetornar = None
+
+        for estado in self.estados:
+            if estado.id == idEstado:
+                estadoRetornar = estado
+                break
+
+        return estadoRetornar
+
+    def cantidadEstadosNoIgual(self) -> int:
+        '''Retorna la cantidad de estados que no son iguales.'''
+        cantidadEstadosNoIguales = 0
+        for estado in self.estados:
+            if estado.equivalenteAlEstado != None:
+                cantidadEstadosNoIguales += 1 
+        return cantidadEstadosNoIguales
