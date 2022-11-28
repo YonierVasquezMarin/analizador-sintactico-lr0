@@ -7,8 +7,8 @@ class Estado:
     id: int
     nombre: str
     equivalenteAlEstado: int | None
-    producciones: list[ Produccion ]
-    transiciones: list[ Transicion ]
+    producciones: list[Produccion]
+    transiciones: list[Transicion]
     control: None
 
     def __init__(self, id, control):
@@ -33,7 +33,8 @@ class Estado:
 
             # Si el simbolo siguiente es un no terminal, se cargan sus producciones
             if simboloSiguiente.tipo == 'noTerminal':
-                produccionesNoTerminal = self.control.obtenerProducciones(simboloSiguiente.contenido)
+                produccionesNoTerminal = self.control.obtenerProducciones(
+                    simboloSiguiente.contenido)
 
                 # Solo tomar en cuenta las producciones que no estan
                 # en el estado. Se comparan sus IDs.
@@ -44,13 +45,14 @@ class Estado:
                             noTerminalExiste = True
                             break
                     if not noTerminalExiste:
-                        self.producciones.append(copy.deepcopy(produccionExterna))
+                        self.producciones.append(
+                            copy.deepcopy(produccionExterna))
 
             # Si el simbolo siguiente es un terminal, se pasa a la siguiente produccion
             else:
                 if posicionProduccionAnalizar == len(self.producciones) - 1:
                     posicionProduccionAnalizar = 0
-                    break # Se terminaron de analizar todas las producciones
+                    break  # Se terminaron de analizar todas las producciones
 
             posicionProduccionAnalizar += 1
 
@@ -59,7 +61,7 @@ class Estado:
         Usando las producciones actuales del estado, por cada simbolo
         después del punto se crea un estado y una transicion.
         '''
-        
+
         # Por cada produccion del estado se verifica el simbolo siguiente
         # y se crea un estado y una transicion si no existe
         for produccion in self.producciones:
@@ -72,18 +74,21 @@ class Estado:
                 if not self.existeTransicion(simboloSiguienteAlPunto):
 
                     # Obtener las producciones que tienen el punto antes del simbolo
-                    produccionesConPuntoSimbolo = self.produccionesConPuntoSimbolo(simboloSiguienteAlPunto)
+                    produccionesConPuntoSimbolo = self.produccionesConPuntoSimbolo(
+                        simboloSiguienteAlPunto)
 
                     # Crear nuevo estado y nueva transicoin
                     nuevoEstado: Estado = self.control.crearEstado()
                     idNuevoEstado = nuevoEstado.id
                     idSimboloSiguienteAlPunto = simboloSiguienteAlPunto.id
-                    nuevaTransicion = Transicion(idSimboloSiguienteAlPunto, idNuevoEstado)
+                    nuevaTransicion = Transicion(
+                        idSimboloSiguienteAlPunto, idNuevoEstado)
                     self.transiciones.append(nuevaTransicion)
 
                     # Darle al nuevo estado las producciones que tienen el punto
                     # antes del simbolo
-                    nuevoEstado.recibirProduccionesTransicion(produccionesConPuntoSimbolo)
+                    nuevoEstado.recibirProduccionesTransicion(
+                        produccionesConPuntoSimbolo)
 
                     # Para el nuevo estado cargar las producciones internas faltantes
                     nuevoEstado.cargarProduccionesFaltantes()
@@ -151,3 +156,23 @@ class Estado:
                         break
 
         return estadoComparar
+
+    def __formatoProducciones(self) -> str:
+        cadena = ''
+        for produccion in self.producciones:
+            cadena = cadena + produccion + '\n'
+        return cadena
+
+    def __formatoTransiciones(self) -> str:
+        cadena = ''
+        for transicion in self.transiciones:
+            simbolo = self.control.obtenerSimboloAPartirDeSuId(
+                transicion.idSimbolo)
+            cadena = cadena + 'Transición a ' + simbolo.contenido + \
+                ' a I-{transicion.idEstadoDestino}\n'
+        return cadena
+
+    def __str__(self):
+        if self.equivalenteAlEstado is not None:
+            return f'IGUAL A {self.equivalenteAlEstado}'
+        return f'I-{self.id}\n{self.__formatoProducciones}\n{self.__formatoTransiciones}'

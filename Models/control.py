@@ -4,11 +4,11 @@ from Models.simbolo import Simbolo
 
 
 class Control:
-    noTerminales: list[ str ]
-    terminales: list[ str ]
-    simbolos: list[ Simbolo ]
-    producciones: list[ Produccion ]
-    estados: list[ Estado ]
+    noTerminales: list[str]
+    terminales: list[str]
+    simbolos: list[Simbolo]
+    producciones: list[Produccion]
+    estados: list[Estado]
 
     def __init__(self, noTerminales: list[str], terminales: list[str], producciones: list[str]):
         self.noTerminales = noTerminales
@@ -26,7 +26,8 @@ class Control:
         El atributo 'tipo' de Simbolo puede ser 'noTerminal' o 'terminal'.
         '''
         for i in range(len(self.noTerminales)):
-            self.simbolos.append(Simbolo(i, 'noTerminal', self.noTerminales[i]))
+            self.simbolos.append(
+                Simbolo(i, 'noTerminal', self.noTerminales[i]))
 
         for i in range(len(self.terminales)):
             self.simbolos.append(Simbolo(i, 'terminal', self.terminales[i]))
@@ -34,7 +35,8 @@ class Control:
     def __cargarProducciones(self, producciones: list[list[str]]):
         '''Crea una instancia de Produccion para cada produccion.'''
         for i in range(len(producciones)):
-            self.producciones.append(Produccion(i, producciones[i][0], producciones[i][1], self))
+            self.producciones.append(Produccion(
+                i, producciones[i][0], producciones[i][1], self))
 
     def obtenerProducciones(self, noTerminal: str):
         '''
@@ -47,7 +49,7 @@ class Control:
                 producciones.append(produccion)
         return producciones
 
-    def obtenerSimbolo(self, contenido) -> Simbolo : 
+    def obtenerSimbolo(self, contenido) -> Simbolo:
         '''
         Devuelve una instancia de Simbolo correspondiente al contenido
         pasado por parametro.
@@ -55,7 +57,19 @@ class Control:
         for simbolo in self.simbolos:
             if simbolo.contenido == contenido:
                 return simbolo
-        raise Exception('Error: no se encontró el simbolo con contenido "', contenido, '"')
+        raise Exception(
+            'Error: no se encontró el simbolo con contenido "', contenido, '"')
+
+    def obtenerSimboloAPartirDeSuId(self, idSimbolo) -> Simbolo:
+        '''
+        Devuelve una instancia de Simbolo correspondiente al id
+        pasado por parámetro
+        '''
+        for simbolo in self.simbolos:
+            if simbolo.id == idSimbolo:
+                return simbolo
+        raise Exception(
+            'Error: no se encontró el símbolo con id "', idSimbolo, '"')
 
     def __cargarEstados(self):
         '''Carga un estado inicial I0, y desde éste se crean los demás estados.'''
