@@ -1,6 +1,7 @@
 from Models.simbolo import Simbolo
 import copy
 
+
 class Produccion:
     id: int
     noTerminal: str
@@ -61,9 +62,23 @@ class Produccion:
             # Sólo mueve el punto si éste no se encuentra al final de la derivación
             self.posicionPunto += 1
 
+    def __insertarPunto(cadena, punto, posicion):
+        if posicion <= len(cadena):
+            izquierda = cadena[:posicion]
+            derecha = cadena[posicion + 1:]
+
+            return '{} {} {}'.format(izquierda, punto, derecha)
+        else:
+            raise ValueError(
+                'La posición donde se quiere insertar el punto no existe.')
+
     def __str__(self):
         contenidoDerivacion = ''
         for simbolo in self.derivacion:
             contenidoDerivacion += simbolo.contenido
-
-        return f'{self.noTerminal} -> {contenidoDerivacion}'
+        if self.produccionRN is not None:
+            return f'{self.produccionRN}'
+        else:
+            contenidoDerivacion += self.__insertarPunto(
+                contenidoDerivacion, '.', self.posicionPunto)
+            return f'{self.noTerminal} -> {contenidoDerivacion}'
