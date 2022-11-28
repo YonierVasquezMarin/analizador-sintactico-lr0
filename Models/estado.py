@@ -53,3 +53,42 @@ class Estado:
                     break # Se terminaron de analizar todas las producciones
 
             posicionProduccionAnalizar += 1
+
+    def crearEstadosYTransiciones(self):
+        '''
+        Usando las producciones actuales del estado, por cada simbolo
+        después del punto se crea un estado y una transicion.
+        '''
+        
+        # Por cada produccion del estado se verifica el simbolo siguiente
+        # y se crea un estado y una transicion si no existe
+        for produccion in self.producciones:
+            simboloSiguiente = produccion.simboloDelanteDelPunto()
+
+            if simboloSiguiente != None:
+
+                # Si no existe transicion con ese simbolo se crea un estado
+                if not self.existeTransicion(simboloSiguiente):
+                    pass
+
+            else:
+                produccion.marcarRN()
+
+    def existeTransicion(self, simbolo):
+        '''
+        Verifica si existe una transicion con el simbolo dado.
+        '''
+        for transicion in self.transiciones:
+            if self.control.obtenerSimbolo(transicion.idSimbolo) == simbolo:
+                return True
+        return False
+
+    def produccionesConPuntoSimbolo(self, simbolo) -> list[Produccion]:
+        '''
+        Devuelve las producciones que tienen el punto antes del simbolo dado.
+        '''
+        producciones = []
+        for produccion in self.producciones:
+            if produccion.simboloDelanteDelPunto() == simbolo:
+                producciones.append(produccion)
+        return producciones

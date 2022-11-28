@@ -63,6 +63,18 @@ class Control:
         # Crear el estado inicial I0
         self.estados.append(Estado(0, self))
 
+        primerEstado = self.estados[0]
+
         # Pasar al estado I0 la primera produccion y cargar sus producciones internas
-        self.estados[0].producciones.append(self.producciones[0])
-        self.estados[0].cargarProduccionesFaltantes()
+        primerEstado.producciones.append(self.producciones[0])
+        primerEstado.cargarProduccionesFaltantes()
+
+        # Cargar los demás estados
+        primerEstado.crearEstadosYTransiciones()
+
+    def crearEstado(self) -> Estado:
+        '''Crea un nuevo estado y lo agrega a la lista de estados.'''
+        idEstado = len(self.estados)
+        estado = Estado(idEstado, self)
+        self.estados.append(estado)
+        return estado

@@ -46,6 +46,13 @@ class Produccion:
             return self.derivacion[self.__posicionPunto]
         return None
 
+    def marcarRN(self):
+        '''
+        Marca la produccion como una produccion de reduccion. Se escribe
+        R0 ó R1 ó R2, etc... 
+        '''
+        self.produccionRN = 'R' + str(self.id)
+
     def __str__(self):
         contenidoDerivacion = ''
         for simbolo in self.derivacion:
