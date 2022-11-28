@@ -8,7 +8,7 @@ class Produccion:
     produccionTransicionada: bool
     produccionRN: str | None
     __longitudDerivacion: int
-    __posicionPunto: int
+    posicionPunto: int
     control = None
 
     def __init__(self, id: int, noTerminal: str, derivacion: str, control):
@@ -18,7 +18,7 @@ class Produccion:
         self.produccionTransicionada = False
         self.produccionRN = None
         self.__longitudDerivacion = 0
-        self.__posicionPunto = 0
+        self.posicionPunto = 0
         self.control = control
         self.__cargarSimbolosDerivacion(derivacion)
         self.__cargarLongitudDerivacion()
@@ -42,8 +42,8 @@ class Produccion:
         Devuelve el simbolo que se encuentra delante del punto.
         Si no hay simbolo delante del punto, devuelve None.
         '''
-        if self.__posicionPunto < self.__longitudDerivacion:
-            return self.derivacion[self.__posicionPunto]
+        if self.posicionPunto < self.__longitudDerivacion:
+            return self.derivacion[self.posicionPunto]
         return None
 
     def marcarRN(self):
@@ -52,6 +52,14 @@ class Produccion:
         R0 ó R1 ó R2, etc... 
         '''
         self.produccionRN = 'R' + str(self.id)
+
+    def moverPunto(self):
+        '''
+        Mueve el punto a la siguiente posicion de la derivacion.
+        '''
+        if self.posicionPunto != len(self.derivacion):
+            # Sólo mueve el punto si éste no se encuentra al final de la derivación
+            self.posicionPunto += 1
 
     def __str__(self):
         contenidoDerivacion = ''

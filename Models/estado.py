@@ -63,13 +63,30 @@ class Estado:
         # Por cada produccion del estado se verifica el simbolo siguiente
         # y se crea un estado y una transicion si no existe
         for produccion in self.producciones:
-            simboloSiguiente = produccion.simboloDelanteDelPunto()
+            simboloSiguienteAlPunto = produccion.simboloDelanteDelPunto()
 
-            if simboloSiguiente != None:
+            if simboloSiguienteAlPunto != None:
 
-                # Si no existe transicion con ese simbolo se crea un estado
-                if not self.existeTransicion(simboloSiguiente):
-                    pass
+                # Si no existe transicion con ese simbolo se crea un estado y
+                # su correspondiente transicion
+                if not self.existeTransicion(simboloSiguienteAlPunto):
+
+                    # Obtener las producciones que tienen el punto antes del simbolo
+                    produccionesConPuntoSimbolo = self.produccionesConPuntoSimbolo(simboloSiguienteAlPunto)
+
+                    # Crear nuevo estado y nueva transicoin
+                    nuevoEstado: Estado = self.control.crearEstado()
+                    idNuevoEstado = nuevoEstado.id
+                    idSimboloSiguienteAlPunto = simboloSiguienteAlPunto.id
+                    nuevaTransicion = Transicion(idSimboloSiguienteAlPunto, idNuevoEstado)
+                    self.transiciones.append(nuevaTransicion)
+
+                    # Darle al nuevo estado las producciones que tienen el punto
+                    # antes del simbolo
+                    nuevoEstado.recibirProduccionesTransicion(produccionesConPuntoSimbolo)
+
+                    # Para el nuevo estado cargar las producciones internas faltantes
+                    nuevoEstado.cargarProduccionesFaltantes()
 
             else:
                 produccion.marcarRN()
@@ -92,3 +109,45 @@ class Estado:
             if produccion.simboloDelanteDelPunto() == simbolo:
                 producciones.append(produccion)
         return producciones
+
+    def recibirProduccionesTransicion(self, producciones):
+        '''
+        Recibe las producciones de una transicion, les mueve el punto
+        a la derecha y las agrega al estado.
+        '''
+        for produccion in producciones:
+            produccionEstadoAnterior = copy.deepcopy(produccion)
+            produccionEstadoAnterior.moverPunto()
+            self.producciones.append(produccionEstadoAnterior)
+
+    def compararConDemasEstados(self):
+        '''
+        Compara las producciones del estado con las producciones de
+        los demás estados, usando sus IDs. Adicional, las posiciones
+        de los puntos deben ser diferentes.
+        '''
+        posicionEstadoComparar = 0
+        estadoComparar = None
+
+        while posicionEstadoComparar < len(self.control.estados):
+            estadoComparar = self.control.estados[posicionEstadoComparar]
+            posicionEstadoComparar += 1
+
+            # Primero comparar la cantidad de producciones de ambos estados
+            if len(self.producciones) != len(estadoComparar.producciones):
+                break
+
+            # Primero: comparar los ids de las producciones
+            for i in range(len(self.producciones)):
+                if self.producciones[i].id != estadoComparar.producciones[i].id:
+                    estadoComparar = None
+                    break
+
+            # Segundo: comparar la posicion de sus puntos
+            if estadoComparar != None:
+                for i in range(len(self.producciones)):
+                    if self.producciones[i].posicionPunto != estadoComparar.producciones[i].posicionPunto:
+                        estadoComparar = None
+                        break
+
+        return estadoComparar
