@@ -25,12 +25,15 @@ class Control:
         Crea una instancia de Simbolo para cada no terminal y terminal.
         El atributo 'tipo' de Simbolo puede ser 'noTerminal' o 'terminal'.
         '''
-        for i in range(len(self.noTerminales)):
-            self.simbolos.append(
-                Simbolo(i, 'noTerminal', self.noTerminales[i]))
+        indice = 0
 
-        for i in range(len(self.terminales)):
-            self.simbolos.append(Simbolo(i, 'terminal', self.terminales[i]))
+        for noTerminal in self.noTerminales:
+            self.simbolos.append(Simbolo(indice, 'noTerminal', noTerminal))
+            indice += 1
+        
+        for terminal in self.terminales:
+            self.simbolos.append(Simbolo(indice, 'terminal', terminal))
+            indice += 1
 
     def __cargarProducciones(self, producciones: list[list[str]]):
         '''Crea una instancia de Produccion para cada produccion.'''
@@ -57,8 +60,7 @@ class Control:
         for simbolo in self.simbolos:
             if simbolo.contenido == contenido:
                 return simbolo
-        raise Exception(
-            'Error: no se encontró el simbolo con contenido "', contenido, '"')
+        raise Exception('Error: no se encontró el simbolo con contenido "', contenido, '"')
 
     def obtenerSimboloAPartirDeSuId(self, idSimbolo) -> Simbolo:
         '''
@@ -86,6 +88,9 @@ class Control:
         # Cargar los demás estados
         primerEstado.crearEstadosYTransiciones()
 
+        # Definir nombre para el primer estado
+        primerEstado.nombre = 'I0'
+
     def crearEstado(self) -> Estado:
         '''Crea un nuevo estado y lo agrega a la lista de estados.'''
         idEstado = len(self.estados)
@@ -108,6 +113,6 @@ class Control:
         '''Retorna la cantidad de estados que no son iguales.'''
         cantidadEstadosNoIguales = 0
         for estado in self.estados:
-            if estado.equivalenteAlEstado != None:
+            if estado.equivalenteAlEstado == None:
                 cantidadEstadosNoIguales += 1 
         return cantidadEstadosNoIguales

@@ -1,5 +1,4 @@
 from Models.simbolo import Simbolo
-import copy
 
 
 class Produccion:
@@ -62,23 +61,39 @@ class Produccion:
             # Sólo mueve el punto si éste no se encuentra al final de la derivación
             self.posicionPunto += 1
 
-    def __insertarPunto(cadena, punto, posicion):
-        if posicion <= len(cadena):
-            izquierda = cadena[:posicion]
-            derecha = cadena[posicion + 1:]
+    def __insertarPunto(self, derivacion, posicionPunto):
+        '''
+        Inserta el punto en la derivacion en la posicion indicada.
+        '''
+        derivacionConPunto = ''
 
-            return '{} {} {}'.format(izquierda, punto, derecha)
-        else:
-            raise ValueError(
-                'La posición donde se quiere insertar el punto no existe.')
+        # Ir iterando la derivacion, y cuando coincide la posicion del punto
+        # y el indice del caracter ahí se introduce primero el punto y luego el
+        # caracter. Si al final de la iteracion no se ha introducido el punto,
+        # se introduce al final de la derivacion.
+        puntoAgregado = False
+        for i in range(len(derivacion)):
+            if i == posicionPunto:                  # Primero introducir el punto
+                derivacionConPunto += '.'
+                puntoAgregado = True
+            derivacionConPunto += derivacion[i]     # Después agregar el caracter
+
+        if not puntoAgregado:                       # Si no se ha agregado el punto, es porque va al final
+            derivacionConPunto += '.'
+
+        return derivacionConPunto
 
     def __str__(self):
+        # Obtener solo la derivacion (sin el punto)
         contenidoDerivacion = ''
-        for simbolo in self.derivacion:
-            contenidoDerivacion += simbolo.contenido
+        for simboloDerivacion in self.derivacion:
+            contenidoDerivacion += simboloDerivacion.contenido
+
+        # Introducir el punto en el texto de la derivacion
+        contenidoDerivacion = self.__insertarPunto(contenidoDerivacion, self.posicionPunto)
+
+        # Si la produccion es RN se agrega su RN correspondiente a la derivacion
         if self.produccionRN is not None:
-            return f'{self.produccionRN}'
-        else:
-            contenidoDerivacion += self.__insertarPunto(
-                contenidoDerivacion, '.', self.posicionPunto)
-            return f'{self.noTerminal} -> {contenidoDerivacion}'
+            contenidoDerivacion += f' [{self.produccionRN}]'
+        
+        return self.noTerminal + ' -> ' + contenidoDerivacion

@@ -32,9 +32,8 @@ class Estado:
             simboloSiguiente = produccionAnalizar.simboloDelanteDelPunto()
 
             # Si el simbolo siguiente es un no terminal, se cargan sus producciones
-            if simboloSiguiente.tipo == 'noTerminal':
-                produccionesNoTerminal = self.control.obtenerProducciones(
-                    simboloSiguiente.contenido)
+            if simboloSiguiente != None and simboloSiguiente.tipo == 'noTerminal':
+                produccionesNoTerminal = self.control.obtenerProducciones(simboloSiguiente.contenido)
 
                 # Solo tomar en cuenta las producciones que no estan
                 # en el estado. Se comparan sus IDs.
@@ -45,8 +44,7 @@ class Estado:
                             noTerminalExiste = True
                             break
                     if not noTerminalExiste:
-                        self.producciones.append(
-                            copy.deepcopy(produccionExterna))
+                        self.producciones.append(copy.deepcopy(produccionExterna))
 
             # Si el simbolo siguiente es un terminal, se pasa a la siguiente produccion
             else:
@@ -66,9 +64,9 @@ class Estado:
         # y se crea un estado y una transicion si no existe
         for produccion in self.producciones:
             simboloSiguienteAlPunto = produccion.simboloDelanteDelPunto()
-
+            
             if simboloSiguienteAlPunto != None:
-
+                
                 # Si no existe transicion con ese simbolo se crea un estado y
                 # su correspondiente transicion
                 if not self.existeTransicion(simboloSiguienteAlPunto):
@@ -80,9 +78,8 @@ class Estado:
                     # Crear nuevo estado y nueva transicoin
                     nuevoEstado: Estado = self.control.crearEstado()
                     idNuevoEstado = nuevoEstado.id
-                    idSimboloSiguienteAlPunto = simboloSiguienteAlPunto.id
                     nuevaTransicion = Transicion(
-                        idSimboloSiguienteAlPunto, idNuevoEstado)
+                        simboloSiguienteAlPunto.id, idNuevoEstado, self.control)
                     self.transiciones.append(nuevaTransicion)
 
                     # Darle al nuevo estado las producciones que tienen el punto
@@ -96,22 +93,21 @@ class Estado:
                     # Comparar este estado con los demás estados
                     estadoEquivalente = nuevoEstado.compararConDemasEstados()
                     if estadoEquivalente != None: # si hay estado equivalente
-                        nuevoEstado.nombre = self.generarNombreEstado()
+                        nuevoEstado.nombre = self.generarNombreEstado(None)
                         nuevoEstado.crearEstadosYTransiciones()
                     else: # no hay estado equivalente
                         nuevoEstado.equivalenteAlEstado = estadoEquivalente.id
                         nuevoEstado.nombre = self.generarNombreEstado(estadoEquivalente.id)
 
             else:
-                produccion.marcarRN()
-                
+                produccion.marcarRN()           
 
     def existeTransicion(self, simbolo):
         '''
         Verifica si existe una transicion con el simbolo dado.
         '''
         for transicion in self.transiciones:
-            if self.control.obtenerSimbolo(transicion.idSimbolo) == simbolo:
+            if self.control.obtenerSimboloAPartirDeSuId(transicion.idSimbolo) == simbolo:
                 return True
         return False
 
@@ -177,24 +173,31 @@ class Estado:
             return "IGUAL A I" + str(idEstadoEquivalente)
         else:
             cantidadEstadosNoIguales = self.control.cantidadEstadosNoIgual()
-            return "I" + str(cantidadEstadosNoIguales)
-
-    def __formatoProducciones(self) -> str:
-        cadena = ''
-        for produccion in self.producciones:
-            cadena = cadena + produccion + '\n'
-        return cadena
-
-    def __formatoTransiciones(self) -> str:
-        cadena = ''
-        for transicion in self.transiciones:
-            simbolo = self.control.obtenerSimboloAPartirDeSuId(
-                transicion.idSimbolo)
-            cadena = cadena + 'Transición a ' + simbolo.contenido + \
-                ' a I-{transicion.idEstadoDestino}\n'
-        return cadena
+            return "I" + str(cantidadEstadosNoIguales-1)
 
     def __str__(self):
-        if self.equivalenteAlEstado is not None:
-            return f'IGUAL A {self.equivalenteAlEstado}'
-        return f'I-{self.id}\n{self.__formatoProducciones}\n{self.__formatoTransiciones}'
+        # Si el estado es equivalente a otro sólo se muestra su
+        # nombre: "IGUAL A IX"
+        if self.equivalenteAlEstado != None:
+            return self.nombre
+
+        # Si el estado no es igual a otro, se muestra su nombre,
+        # producciones y transiciones
+        estadoString = ''
+
+        # Agregar el nombre del estado
+        estadoString += self.nombre + '\n\n'
+
+        # Agregar las producciones
+        produccionesString = ''
+        for produccion in self.producciones:
+            produccionesString += produccion.__str__() + '\n'
+        estadoString += produccionesString + '\n'
+
+        # Agregar las transiciones
+        transicionesString = ''
+        for transicion in self.transiciones:
+            transicionesString += transicion.__str__() + '\n'
+        estadoString += transicionesString
+
+        return estadoString

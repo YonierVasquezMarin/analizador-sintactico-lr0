@@ -1,27 +1,27 @@
 class Helper:
-    listaNoTerminales: list()
-    listaTerminales: list()
-    listaProducciones: list()
+    listaNoTerminales: list[str]
+    listaTerminales: list[str]
+    listaProducciones: list[str]
 
     def __init__(self, cadenaNoTerminales: str, cadenaTerminales: str, cadenaProducciones: str) -> None:
         self.prepararListas(cadenaProducciones,
                             cadenaNoTerminales, cadenaNoTerminales)
 
-    def __prepararListaNoTerminales(self, cadenaNoTerminales: str) -> list():
+    def __prepararListaNoTerminales(self, cadenaNoTerminales: str) -> list[str]:
         listaNoTerminales = []
         listaNoTerminal = cadenaNoTerminales.split(",")
         for noTerminal in listaNoTerminal:
             listaNoTerminales.append(noTerminal.strip())
         return listaNoTerminales
 
-    def __prepararListaTerminales(self, cadenaTerminales: str) -> list():
+    def __prepararListaTerminales(self, cadenaTerminales: str) -> list[str]:
         listaTerminales = []
         listaTerminal = cadenaTerminales.split(",")
         for terminal in listaTerminal:
             listaTerminales.append(terminal.strip())
         return listaTerminales
 
-    def __prepararListaProducciones(self, cadenaProducciones: str) -> list():
+    def __prepararListaProducciones(self, cadenaProducciones: str) -> list[str]:
         # Definir listas para las producciones
         listaProducciones = []
         separador = '\n'
