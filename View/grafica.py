@@ -9,8 +9,8 @@ class Grafica:
     terminales = ""
     producciones = ""
 
-    def __init__(self):
-        # self.callback = callback
+    def __init__(self, callback):
+        self.callback = callback
         self.ventana = tk.Tk()
         self.ventana.title("Analizador LR0")
         self.ventana.geometry("{0}x{1}".format(
@@ -53,24 +53,12 @@ class Grafica:
         self.noTerminales = self.entry.get()
         self.terminales = self.entry2.get()
         self.producciones = self.entry3.get("1.0", 'end-1c')
-        # listaRetorno = self.callback(
-        #     self.noTerminales, self.terminales, self.producciones)
-        # textoNoTerminales = ""
-        # textoTerminales = ""
-        # textoConjuntoPrediccion = ""
-        # for i in listaRetorno[0]:
-        #     textoNoTerminales += str(i) + "\n"
-        # for i in listaRetorno[1]:
-        #     textoTerminales += str(i) + "\n"
-        # for i in listaRetorno[2]:
-        #     textoConjuntoPrediccion += str(i) + "\n"
+        listaEstados = self.callback(
+            self.noTerminales, self.terminales, self.producciones)
 
-        cadena = [
-            'I-0\nS -> .A\nA -> .(A)\nA -> .a\nTransicion A a I1\nTransicion ( a I2\nTransicion a I4', 'I-1\nS -> A. [R0]']
-        print(tuple(cadena))
-        self.generarVentanaResultado(cadena)
+        self.generarVentanaResultado(listaEstados)
 
-    def generarVentanaResultado(self, listaEstados=[]):
+    def generarVentanaResultado(self, listaEstados: list):
         '''Genera la ventana con el resultado del análisis LL1'''
         # Valores por defecto
         self.ventanaResultado = tk.Tk()
@@ -81,7 +69,7 @@ class Grafica:
         self.__generarTabla(listaEstados)
         self.ventanaResultado.mainloop()
 
-    def __generarTabla(self, listaEstados: str):
+    def __generarTabla(self, listaEstados: list):
         treeView = ttk.Treeview(self.ventanaResultado,
                                 columns=tuple(listaEstados))
 
