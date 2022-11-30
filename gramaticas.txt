@@ -1,0 +1,24 @@
+terminales = b, c
+noTerminales = S, A, M
+
+S -> Ab
+A -> M
+M -> c
+
+terminales = (, ), a
+noTerminales = S, A
+S -> A
+A -> (A)
+A -> a
+
+
+terminales = n, +
+noTerminales = E
+E -> E+n
+E -> n
+
+
+terminales = (, ), a
+noTerminales = A
+A -> (A)
+A -> a
