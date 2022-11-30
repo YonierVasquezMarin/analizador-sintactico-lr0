@@ -54,8 +54,8 @@ class Grafica:
         self.terminales = self.entry2.get()
         self.producciones = self.entry3.get("1.0", 'end-1c')
         listaEstados = self.callback(
-            self.noTerminales, self.terminales, self.producciones)
-
+            self.noTerminales, self.terminales, self.producciones
+        )
         self.generarVentanaResultado(listaEstados)
 
     def generarVentanaResultado(self, listaEstados: list):
@@ -70,6 +70,7 @@ class Grafica:
         self.ventanaResultado.mainloop()
 
     def __generarTabla(self, listaEstados: list):
+        print(tuple(listaEstados))
         treeView = ttk.Treeview(self.ventanaResultado,
                                 columns=tuple(listaEstados))
 
@@ -77,9 +78,8 @@ class Grafica:
         count = 1
         for i in listaEstados:
             treeView.column("#{}".format(str(count)))
-            treeView.heading("#{}".format(str(count)), text=i[0:3])
+            treeView.heading("#{}".format(str(count)), text=i.__str__()[0:2])
             count = count + 1
         # En caso de no tener columnas bien distribuidas
         treeView.column("#0", width=0)
-        for i in range(1, len(listaEstados)):
-            treeView.insert("", i, values=tuple(listaEstados))
+        treeView.insert("", 1, values=tuple(listaEstados))

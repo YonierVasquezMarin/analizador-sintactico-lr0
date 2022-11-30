@@ -5,7 +5,7 @@ class Helper:
 
     def __init__(self, cadenaNoTerminales: str, cadenaTerminales: str, cadenaProducciones: str) -> None:
         self.prepararListas(cadenaProducciones,
-                            cadenaNoTerminales, cadenaNoTerminales)
+                            cadenaTerminales, cadenaNoTerminales)
 
     def __prepararListaNoTerminales(self, cadenaNoTerminales: str) -> list[str]:
         listaNoTerminales = []

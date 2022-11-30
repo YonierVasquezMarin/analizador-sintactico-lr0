@@ -186,7 +186,7 @@ class Estado:
         estadoString = ''
 
         # Agregar el nombre del estado
-        estadoString += self.nombre + '\n\n'
+        estadoString += self.nombre + '\n'
 
         # Agregar las producciones
         produccionesString = ''
